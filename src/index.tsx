@@ -1,13 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
+import {BrowserRouter} from "react-router-dom"
 import reportWebVitals from './reportWebVitals';
-import {Resevation} from "./components/Resevation"
-import {Facility} from "./components/Facility"
 import {MuiPickersUtilsProvider} from "@material-ui/pickers"
 import Utils from "@date-io/dayjs"
 import 'dayjs/locale/ja';
 import { Dayjs } from 'dayjs';
+import {Routing} from "./components/Routing"
 
 class ExtendedUtils extends Utils {
   getCalendarHeaderText(date: Dayjs) {
@@ -22,11 +21,10 @@ class ExtendedUtils extends Utils {
 ReactDOM.render(
   <React.StrictMode>
     <MuiPickersUtilsProvider utils={ExtendedUtils} locale="ja" >
-      <Resevation />
+      <BrowserRouter>
+        <Routing />
+      </BrowserRouter>
     </MuiPickersUtilsProvider>
-    
-    {/* <Facility/> */}
-    {/* <App /> */}
   </React.StrictMode>,
   document.getElementById('root')
 );
