@@ -2,10 +2,12 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import {Facility} from "./components/Facility"
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Facility/>
+    {/* <App /> */}
   </React.StrictMode>,
   document.getElementById('root')
 );
