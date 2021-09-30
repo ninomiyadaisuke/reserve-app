@@ -1,6 +1,6 @@
 import {IUser} from "./IUser"
 
-export type ISystem = {
+export interface ISystem {
   createUser :IUser
   createDate : Date
   lastUpdateUser :IUser
