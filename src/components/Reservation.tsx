@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from "react";
-import { IResevation } from "../models/IResevation";
+import { IReservation } from "../models/IReservation";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   Container,
@@ -42,7 +42,7 @@ const dummyFacilities: IFacility[] = [
   },
 ];
 
-const initResevation: IResevation = {
+const initResevation: IReservation = {
   id: "001",
   facilityId: "001",
   subject: "目的01",
@@ -80,9 +80,9 @@ const useStyle = makeStyles((theme) => ({
   },
 }));
 
-export const Resevation: React.FC = () => {
+export const Reservation: React.FC = () => {
   const style = useStyle();
-  const { errors, control } = useForm<IResevation>({
+  const { errors, control } = useForm<IReservation>({
     defaultValues: initResevation,
     mode: "onBlur",
   });

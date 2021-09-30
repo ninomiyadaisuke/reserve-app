@@ -1,7 +1,7 @@
 import {Dayjs} from "dayjs"
 import { ISystem } from "./ISystem"
 
-export interface IResevation {
+export interface IReservation {
   id: string
   facilityId: string
   subject: string
