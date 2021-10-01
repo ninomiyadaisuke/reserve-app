@@ -3,9 +3,9 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Button } from "@material-ui/core";
 import { DoubleArrow } from "@material-ui/icons";
 import { DatePicker } from "@material-ui/pickers";
-import dayjs from "dayjs";
 import { CurrentDateContext } from "./ReservationList";
 import { MaterialUiPickersDate } from "@material-ui/pickers/typings/date";
+import {Link} from "react-router-dom"
 
 const useStyles = makeStyles(() => ({
   header: {
@@ -74,7 +74,7 @@ export const ReservationListHeader: React.FC = () => {
         </div>
       </div>
       <div className={styles.actions}>
-        <Button variant="contained" color="primary">
+        <Button variant="contained" color="primary" component={Link} to="/facility/">
           設備の登録
         </Button>
       </div>

@@ -1,7 +1,8 @@
-import React,{useMemo} from 'react'
+import React,{useMemo,useCallback} from 'react'
 import {IReservation} from "../models/IReservation"
 import {Property} from "csstype"
 import { makeStyles, Theme } from '@material-ui/core/styles';
+import {useHistory} from "react-router-dom"
 
 type PropsType = {
   reservation: IReservation;
@@ -30,13 +31,20 @@ const useStyles = makeStyles<Theme,StyleType>(() => ({
   bar: {
     height: "50%",
     width: "100%",
-    backgroundColor: (p) => p.backgroundColor
+    backgroundColor: (p) => p.backgroundColor,
+    cursor: "pointer"
   }
 }))
 
 export const ResevationBar:React.FC<PropsType> = (props) => {
   const {reservation,leftOffset,hourWidth,beginHour,backgroundColor} = props
   const { startDate, endDate} = reservation
+  const history = useHistory()
+
+  const click = useCallback(() => {
+    history.push("/reservation/" + reservation.id)
+  },[reservation.id])
+
   const width = useMemo(() => {
     const hours = endDate.diff(startDate,"minute") / 60
     return hourWidth * hours
@@ -56,7 +64,7 @@ export const ResevationBar:React.FC<PropsType> = (props) => {
 
   return (
     <div className={style.root}>
-      <div className={style.bar}></div>
+      <div className={style.bar} onClick={click}></div>
     </div>
   )
 }
