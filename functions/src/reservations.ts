@@ -1,10 +1,11 @@
-import express from "express"
-import { Firestore,DocumentReference } from "@google-cloud/firestore"
+import express, { Request, Response } from "express"
+import { Firestore, DocumentReference } from "@google-cloud/firestore"
 import { IReservation } from "./models/IReservation"
 import dayjs from "dayjs"
 import tz from "dayjs/plugin/timezone"
 import { ISystem } from "./models/ISystem"
 import { IFacility } from "./models/IFacility"
+import { body,validationResult,param } from "express-validator"
 
 dayjs.extend(tz)
 dayjs.tz.setDefault("Asia/Tokyo")
@@ -63,9 +64,9 @@ type DbReservation = Omit<IReservation, "facilityId" | "startDate" | "endDate"> 
 }
 
 //リクエストのJSONをDBの型に変換する
-const convertToDbType = (reqBody: RequestReservation):DbReservation => {
+const convertToDbType = (reqBody: RequestReservation): DbReservation => {
   const facility = firestore.doc("facilities/" + reqBody.facilityId)
-  delete(reqBody as any).id
+  delete (reqBody as any).id
   return {
     ...reqBody,
     facilityId: facility,
@@ -74,31 +75,56 @@ const convertToDbType = (reqBody: RequestReservation):DbReservation => {
   }
 }
 
-app.post("/",async (req, res) => {
-  const data = convertToDbType(req.body)
-  const now = new Date()
-  const addData = {
-    system: {
-      createDate: now,
-      createUser: {
-        displayName: "",
-        email: "",
-        face: "",
-      },
-      lastUpdate:now,
-      lastUpdateUser:{
-        displayName: "",
-        email: "",
-        face: "",
-      }
-    } as ISystem
-  }
-  const docRef = await getCollection().add(addData)
-  const snapshot = await docRef.get()
-  res.json({id: snapshot.id})
-})
+app.post(
+  "/",
+  [
+    body("subject").isString().trim().notEmpty(),
+    body("description").isString(),
+  ],
+  async (req: Request, res: Response) => {
+    const valid = validationResult(req)
+    if (!valid.isEmpty()) {
+      res.status(400).json({errors:valid.array()})
+      return
+    }
+    const data = convertToDbType(req.body)
+    const now = new Date()
+    const addData = {
+      system: {
+        createDate: now,
+        createUser: {
+          displayName: "",
+          email: "",
+          face: "",
+        },
+        lastUpdate: now,
+        lastUpdateUser: {
+          displayName: "",
+          email: "",
+          face: "",
+        }
+      } as ISystem
+    }
+    const docRef = await getCollection().add(addData)
+    const snapshot = await docRef.get()
+    res.json({ id: snapshot.id })
+  })
 
-app.put("/:id", async (req,res) => {
+app.put(
+  "/:id",
+  [
+    param("id").notEmpty(),
+    body("subject").isString().trim().notEmpty(),
+    body("description").isString(),
+    body("startDate").notEmpty().isISO8601(),
+    body("endDate").notEmpty().isISO8601(),
+  ],
+async (req:Request, res:Response) => {
+  const valid = validationResult(req)
+  if (!valid.isEmpty()){
+    res.status(400).json({errors:valid.array()})
+    return
+  }
   const id = req.params.id
   const data = convertToDbType(req.body)
 
@@ -122,7 +148,7 @@ app.put("/:id", async (req,res) => {
   res.status(204).end()
 })
 
-app.delete("/:id", async (req,res) => {
+app.delete("/:id", async (req, res) => {
   const id = req.params.id
   const docRef = getCollection().doc(id)
   await docRef.delete()
