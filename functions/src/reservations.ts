@@ -4,6 +4,7 @@ import { IReservation } from "./models/IReservation"
 import dayjs from "dayjs"
 import tz from "dayjs/plugin/timezone"
 import { ISystem } from "./models/ISystem"
+import { IFacility } from "./models/IFacility"
 
 dayjs.extend(tz)
 dayjs.tz.setDefault("Asia/Tokyo")
@@ -95,6 +96,37 @@ app.post("/",async (req, res) => {
   const docRef = await getCollection().add(addData)
   const snapshot = await docRef.get()
   res.json({id: snapshot.id})
+})
+
+app.put("/:id", async (req,res) => {
+  const id = req.params.id
+  const data = convertToDbType(req.body)
+
+  const docRef = getCollection().doc(id)
+  const snapshot = await docRef.get()
+  if (!snapshot.exists) {
+    res.status(404).send()
+    return
+  }
+  const oldData = snapshot.data() as IFacility
+  const newData = {
+    ...oldData.system,
+    lastUpdate: new Date(),
+    lastUpdateUser: {
+      displayName: "",
+      email: "",
+      face: "",
+    }
+  } as ISystem
+  docRef.update(newData)
+  res.status(204).end()
+})
+
+app.delete("/:id", async (req,res) => {
+  const id = req.params.id
+  const docRef = getCollection().doc(id)
+  await docRef.delete()
+  res.status(204).send()
 })
 
 export default app
