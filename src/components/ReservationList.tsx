@@ -1,4 +1,14 @@
-import React, { useEffect,useCallback,useMemo,useRef,useState } from "react";
+import React, {
+  createContext,
+  Dispatch,
+  Reducer,
+  useCallback,
+  useEffect,
+  useMemo,
+  useReducer,
+  useRef,
+  useState,
+} from "react";
 import {
   indigo,
   lightBlue,
@@ -13,8 +23,9 @@ import { Link } from "react-router-dom";
 import { IFacility } from "../models/IFacility";
 import { IReservation } from "../models/IReservation";
 import { makeStyles } from "@material-ui/core/styles";
-import dayjs from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import { FacilityLane } from "./FacilityLane";
+import { ReservationListHeader } from "./ReservationListHeader";
 
 const dummyFacilities: IFacility[] = [
   {
@@ -139,30 +150,65 @@ const getColor = (n: number) => {
   return colors[index];
 };
 
+type ContextType = {
+  currentDate: Dayjs;
+  dispatch:Dispatch<Action>
+};
+
+type ActionType = "ChangeDate" | "NextDay" | "PrevDay"
+
+type Action = {
+  type: ActionType
+  payload?: Dayjs
+}
+
+type StateType = {
+  currentDate: Dayjs
+}
+
+const reducerProcesses: {
+  [type in ActionType]: (s:StateType, a: Action) => StateType
+} = {
+  ChangeDate: (s,a) => {
+    return a.payload ? {...s, currentDate: a.payload} : s
+  },
+  NextDay: (s) => ({...s, currentDate: s.currentDate.add(1,"day")}),
+  PrevDay: (s) => ({...s, currentDate: s.currentDate.add(-1, "day")})
+}
+
+const reducer: Reducer<StateType,Action> = (state, action) => {
+  return reducerProcesses[action.type](state,action)
+}
+
+export const CurrentDateContext = createContext<ContextType>({} as ContextType);
+
 export const ReservationList: React.FC = () => {
   const styles = useStyles();
-  const cell = useRef<HTMLDivElement>(null)
+  const cell = useRef<HTMLDivElement>(null);
+  const [state,dispatch] = useReducer(reducer,{currentDate:dayjs()} );
   console.log(cell);
-  
-  const [cellWidth, setCellWidth] = useState<number>(0)
+
+  const [cellWidth, setCellWidth] = useState<number>(0);
 
   const onResize = useCallback(() => {
-    if(!cell?.current) return
-    setCellWidth(cell.current.getBoundingClientRect().width)
-  },[cell])
+    if (!cell?.current) return;
+    setCellWidth(cell.current.getBoundingClientRect().width);
+  }, [cell]);
 
-  useEffect(onResize,[cell])
+  useEffect(onResize, [cell]);
   useEffect(() => {
-    window.addEventListener("resize",onResize)
+    window.addEventListener("resize", onResize);
     return () => {
-      window.removeEventListener("resize",onResize)
-    }
-  },[])
+      window.removeEventListener("resize", onResize);
+    };
+  }, []);
   const headerCells = useMemo(() => {
     const cells: JSX.Element[] = [];
-    cells.push(<div key={8} ref={cell} className={"timeCell"}>
-      8
-    </div>)
+    cells.push(
+      <div key={8} ref={cell} className={"timeCell"}>
+        8
+      </div>
+    );
     for (let i = 9; i <= 19; i++) {
       cells.push(
         <div key={i} className="timeCell">
@@ -191,13 +237,16 @@ export const ReservationList: React.FC = () => {
 
   return (
     <div>
-      <div>
-        <div className={styles.lane}>
-          <div className="laneHeader"></div>
-          {headerCells}
+      <CurrentDateContext.Provider value={{ currentDate: state.currentDate, dispatch }}>
+        <ReservationListHeader />
+        <div>
+          <div className={styles.lane}>
+            <div className="laneHeader"></div>
+            {headerCells}
+          </div>
+          {lanes}
         </div>
-        {lanes}
-      </div>
+      </CurrentDateContext.Provider>
     </div>
   );
 };
