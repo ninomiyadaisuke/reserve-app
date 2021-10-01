@@ -1,9 +1,10 @@
 import * as functions from 'firebase-functions';
+import express from "express"
+import facilities from "./facilities"
+import reservations from "./reservations"
 
-// Start writing Firebase Functions
-// https://firebase.google.com/docs/functions/typescript
+const app = express()
+app.use("/api/facilities",facilities)
+app.use("/api/reservations",reservations)
 
-export const helloWorld = functions.https.onRequest((request, response) => {
-  functions.logger.info("Hello logs!", {structuredData: true});
-  response.send("Hello from Firebase!");
-});
+export const fn = functions.https.onRequest(app)
