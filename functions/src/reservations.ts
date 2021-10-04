@@ -15,7 +15,7 @@ const getCollection = () => firestore.collection("reservations")
 
 const app = express()
 
-app.get("/", async (req, res) => {
+app.get("/", async (req, res,next) => {
   const dateString = req.query.date as string
   const date = dayjs(dateString)
   if (!date.isValid()) {
@@ -28,6 +28,10 @@ app.get("/", async (req, res) => {
     .where("startDate", ">=", begin.toDate())
     .where("startDate", "<=", end.toDate())
     .get()
+    .catch(e => {
+      next(e)
+    })
+  if(!snapshot) return
   const reservations = snapshot.docs.map((doc) => {
     const data = doc.data() as IReservation
     data.id = doc.id
@@ -90,6 +94,7 @@ app.post(
     const data = convertToDbType(req.body)
     const now = new Date()
     const addData = {
+      ...data,
       system: {
         createDate: now,
         createUser: {
@@ -126,7 +131,7 @@ async (req:Request, res:Response) => {
     return
   }
   const id = req.params.id
-  const data = convertToDbType(req.body)
+  const data = convertToDbType(req.body);
 
   const docRef = getCollection().doc(id)
   const snapshot = await docRef.get()
@@ -137,6 +142,7 @@ async (req:Request, res:Response) => {
   const oldData = snapshot.data() as IFacility
   const newData = {
     ...oldData.system,
+    ...data,
     lastUpdate: new Date(),
     lastUpdateUser: {
       displayName: "",

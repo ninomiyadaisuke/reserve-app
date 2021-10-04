@@ -1,0 +1,44 @@
+[debug] [2021-10-04T00:03:08.923Z] ----------------------------------------------------------------------
+[debug] [2021-10-04T00:03:08.926Z] Command:       /usr/local/bin/node /usr/local/bin/firebase emulators:start --import ./data
+[debug] [2021-10-04T00:03:08.926Z] CLI Version:   9.0.1
+[debug] [2021-10-04T00:03:08.926Z] Platform:      darwin
+[debug] [2021-10-04T00:03:08.927Z] Node Version:  v14.15.1
+[debug] [2021-10-04T00:03:08.928Z] Time:          Mon Oct 04 2021 09:03:08 GMT+0900 (日本標準時)
+[debug] [2021-10-04T00:03:08.928Z] ----------------------------------------------------------------------
+[debug] [2021-10-04T00:03:08.928Z] 
+[debug] [2021-10-04T00:03:08.940Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2021-10-04T00:03:08.941Z] > authorizing via signed-in user
+[info] i  emulators: Starting emulators: functions, firestore, hosting {"metadata":{"emulator":{"name":"hub"},"message":"Starting emulators: functions, firestore, hosting"}}
+[debug] [2021-10-04T00:03:08.962Z] [hub] writing locator at /var/folders/hv/5qtqhl2s4dxb9qw70z84zx8h0000gn/T/hub-facility-reservations-e689e.json
+[info] i  emulators: Shutting down emulators. {"metadata":{"emulator":{"name":"hub"},"message":"Shutting down emulators."}}
+[info] i  hub: Stopping emulator hub {"metadata":{"emulator":{"name":"hub"},"message":"Stopping emulator hub"}}
+[debug] [2021-10-04T00:03:09.118Z] Error: ENOENT: no such file or directory, lstat '/Users/ninomiyadaisuke/reserve-app/functions/data'
+    at Object.lstatSync (fs.js:1077:3)
+    at findExportMetadata (/usr/local/lib/node_modules/firebase-tools/lib/emulator/controller.js:153:32)
+    at Object.startAll (/usr/local/lib/node_modules/firebase-tools/lib/emulator/controller.js:215:31)
+    at processTicksAndRejections (internal/process/task_queues.js:93:5)
+    at async Command.actionFn (/usr/local/lib/node_modules/firebase-tools/lib/commands/emulators-start.js:26:9)
+[error] 
+[error] Error: An unexpected error has occurred.
+[debug] [2021-10-04T00:24:32.852Z] ----------------------------------------------------------------------
+[debug] [2021-10-04T00:24:32.855Z] Command:       /usr/local/bin/node /usr/local/bin/firebase emulators:start --import ./data
+[debug] [2021-10-04T00:24:32.856Z] CLI Version:   9.0.1
+[debug] [2021-10-04T00:24:32.856Z] Platform:      darwin
+[debug] [2021-10-04T00:24:32.856Z] Node Version:  v14.15.1
+[debug] [2021-10-04T00:24:32.857Z] Time:          Mon Oct 04 2021 09:24:32 GMT+0900 (日本標準時)
+[debug] [2021-10-04T00:24:32.857Z] ----------------------------------------------------------------------
+[debug] [2021-10-04T00:24:32.858Z] 
+[debug] [2021-10-04T00:24:32.868Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2021-10-04T00:24:32.869Z] > authorizing via signed-in user
+[info] i  emulators: Starting emulators: functions, firestore, hosting {"metadata":{"emulator":{"name":"hub"},"message":"Starting emulators: functions, firestore, hosting"}}
+[debug] [2021-10-04T00:24:32.888Z] [hub] writing locator at /var/folders/hv/5qtqhl2s4dxb9qw70z84zx8h0000gn/T/hub-facility-reservations-e689e.json
+[info] i  emulators: Shutting down emulators. {"metadata":{"emulator":{"name":"hub"},"message":"Shutting down emulators."}}
+[info] i  hub: Stopping emulator hub {"metadata":{"emulator":{"name":"hub"},"message":"Stopping emulator hub"}}
+[debug] [2021-10-04T00:24:33.055Z] Error: ENOENT: no such file or directory, lstat '/Users/ninomiyadaisuke/reserve-app/functions/data'
+    at Object.lstatSync (fs.js:1077:3)
+    at findExportMetadata (/usr/local/lib/node_modules/firebase-tools/lib/emulator/controller.js:153:32)
+    at Object.startAll (/usr/local/lib/node_modules/firebase-tools/lib/emulator/controller.js:215:31)
+    at processTicksAndRejections (internal/process/task_queues.js:93:5)
+    at async Command.actionFn (/usr/local/lib/node_modules/firebase-tools/lib/commands/emulators-start.js:26:9)
+[error] 
+[error] Error: An unexpected error has occurred.
